@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="info">
+        <div class="info__search">
+            <div class="info__title">Мои события</div>
+            <span>Поиск по дате с</span>
+            <input type="date" class="info__inputDate" id="startDate" onchange="filterResults()">
+            <span>По</span>
+            <input type="date" class="info__inputDate" id="endDate" onchange="filterResults()">
+            <select name="" id="directionSelect" type="directionSelect" onchange="filterResults()">
+                <option value="all">All</option>
+                {% for direction in directions %}
+                    <option class='data__direction' id='direction-{{direction.title}}' value="{{direction.title}}">{{direction.title}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="cards">
+            {% for event in user_events %}
+            <div class="card" data-event="{{ event.id }}">
+                <img src="{% static 'null.png' %}" alt="" class="card__img">
+                <div class="card__info">
+                    <div class="card__title">{{ event.title }}</div>
+                    <div class="card__date">{{ event.date }}</div>
+                    <div class="card__direction">{{ event.direction.title }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="info__btns">
+            <a href="/" class="info__btn btn">Назад</a>
+            <a href="#" class="info__btn btn">Добавить</a>
+        </div>
+    </div>
+   {% endblock content %}
+   {% block scripts %}
+       <script src="{% static 'js/app.js' %}"></script>
+   {% endblock scripts %}

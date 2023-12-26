@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="info">
+    <div class="info__title">
+        Жюри
+    </div>
+    <div class="info__search">
+        <div class="info__title">{{ Title }}</div>
+        <select  name="" id="data__select" type="dropdown" onchange="filterJury()">
+            <option value="all">Все жюри</option>
+            {% for jury in juries %}
+                <option class='data__direction' id='direction-{{jury.full_name}}' value="{{jury.full_name}}">{{jury.full_name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="home">
+        {% for event in events %}
+        <div class="card" data-event="{{ event.id }}">
+            <img src="{% static 'null.png' %}" alt="" class="card__img">
+            <div class="card__info">
+                <div class="card__title"><span>Событие: </span>{{ event.title }}</div>
+                <div class="card__direction"><span>Направление: </span>{{ event.direction }}</div>
+                <div class="card__creator"><span>Создатель: </span>{{ event.direction.creator }}</div>
+                <div class="card__date"><span>Дата: </span>{{ event.date }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    <div class="info__btns">
+        <a href="/" class="info__btn btn">Назад</a>
+        <a class='info__btn btn' href="{% url 'import_file_form' %}">
+            <img class="header__notification" src="{% static 'img/base/import.svg' %}" alt="import_file">
+        </a>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'js/app.js' %}"></script>
+{% endblock scripts %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %} 
+<div class="event">
+    <form method="post" enctype="multipart/form-data" action="{% url 'import_file' %}">
+        {% csrf_token %}
+        <div class="event__search"> 
+            <div class="event__title">Куда импортировать</div> 
+            <div class="event__inputs"> 
+                <select name="dropdown" id="dropdown" type="dropdown" onchange="hideElements()"> 
+                    <option value="" selected disabled hidden>Выбрать</option> 
+                    <option value="Direction">События</option> 
+                    <option value="CustomUser">Пользователи</option> 
+                </select> 
+            </div> 
+            <label for="images" class="drop-container" id="dropcontainer"> 
+                <span class="drop-title">Перетащите</span> 
+                или
+                    <input type="file" name="file" accept=".xlsx" required>
+            </label> 
+        </div> 
+        <div class="event__btns"> 
+            <a href="/" class="event__btn btn">Назад</a> 
+            <button onclick="importFile()" type="submit" class="event__btn btn">Импортировать</button>
+        </div>
+    </form>
+</div> 
+{% endblock content %} 
+ 
+{% block scripts %} 
+<script> 
+    function importFile() {  // Обновленная функция, вызываемая по клику на кнопке
+        const fileInput = document.getElementById('images');
+        const file = fileInput.files[0]; 
+        if (file) { 
+            const formData = new FormData(); 
+            formData.append('file', file, file.name);  // добавляем имя файла 
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/import_file/', true);
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+            xhr.setRequestHeader('Content-Type', 'multipart/form-data'); // Установка правильного Content-Type
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const responseData = JSON.parse(xhr.responseText);
+                    console.log(responseData.url);
+                } else {
+                    console.error('Error:', xhr.statusText);
+                }
+            };
+
+            xhr.send(formData);
+
+        } 
+    }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script> 
+ 
+<script src="{% static 'js/app.js' %}"></script> 
+{% endblock scripts %}

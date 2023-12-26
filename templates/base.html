@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'css/style.css'%}">
+    {%block style%}
+    {%endblock style%}
+    <title>{{title}}</title>
+</head>
+<body>
+    <header class="header">
+        <ul class="header__items">
+            
+            {% if user.role_id == 2 or 1 %}
+            <li class="header__item">
+                <a href="{% url 'event_form' %}">
+                    <img class="header__fav" src="{% static 'img/base/add.svg' %}" alt="favourites">
+                </a>
+            </li>
+            <li class="header__item">
+                <a href="{% url 'import_file_form' %}">
+                    <img class="header__notification" src="{% static 'img/base/import.svg' %}" alt="import_file">
+                </a>
+            </li>
+            {% endif %}
+            <li class="header__item">
+                <a href="" class="header__profile-link">
+                    {% if user.photo %}
+                      <div class="header__img">
+                        <img src="{{ user.photo.url }}" alt="" class="">
+                     </div>
+                    {% else %}
+                        <div class="header__img">
+                            <img src="{% static 'img/base/acc.png' %}" alt="" class="">
+                        </div>
+                    {% endif %}
+                </a>
+                <div class="header__dropdown dropdown">
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li class="dropdown__item">
+                                <a href="{% url 'profile' %}">
+                                    <img src="img/login/user.svg" alt="">
+                                    <span>Посмотреть профиль</span>
+                                </a>
+                            </li>
+                            <li class="dropdown__item">
+                                <form method="post" action={% url 'logout' %}> 
+                                    {% csrf_token %}
+                                        <img src="{% static 'img/base/off.svg' %}" alt="">
+                                        <input class="header__auth" type='submit' value='Выйти' >
+                                </form>
+                            </li>
+                        {% else %}
+                            <li class="dropdown__item">
+                                <a href="{% url 'registration' %}">
+                                    <img src="{% static 'img/base/off.svg' %}" alt="">
+                                    <span>Войти</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </header>
+    {%block content%}
+
+    {%endblock content%}
+</body>
+    {%block scripts%}
+        <script src="{% static 'js/app.js' %}" > </script>
+    {%endblock scripts%}
+</html>

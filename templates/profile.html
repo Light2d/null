@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="profile">
+    <div class="profile__card">
+        {% if user.photo %}
+            <input type="file" id="fileInput" style="display:none;">
+            <label for="fileInput" class="file-label">
+             <div class="profile__img">
+                <img src="{{ user.photo.url }}" alt="" class="profile__img">
+             </div>
+            </label>
+        {% else %}
+            <input type="file" id="fileInput" style="display:none;">
+            <label for="fileInput" class="file-label">
+            <div class="profile__img">
+                <img src="{% static 'img/base/acc.png' %}" alt="" class="">
+            </div>
+            </label>
+        {% endif %}
+        <div class="profile__name">{{user.full_name}}</div> 
+        <div class="profile__mail"><span>Email:</span> {{user.email}}</div> 
+        <div class="profile__num"><span>Номер телефона:</span> {{user.phone_number}}</div> 
+        <div class="profile__type"><span>Роль:</span> {{role}}</div> 
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/upload_avatar/', true);
+                xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const responseData = JSON.parse(xhr.responseText);
+                        console.log(responseData.url);
+
+                        // Обновляем изображение в интерфейсе
+                        const profileImage = document.querySelector('.profile__img');
+                        profileImage.src = responseData.url;
+                    } else {
+                        console.error('Error:', xhr.statusText);
+                    }
+                };
+
+                xhr.send(formData);
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock scripts %}

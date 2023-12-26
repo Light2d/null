@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Регистрация</title>
+</head>
+
+<body>
+    <div class="register">
+        <div class="register__logo">
+            <img src="{% static 'null.png' %}" alt="" class="">
+        </div>
+        <div class="register__card">
+            <div class="register__title">Регистрация</div>
+            <form class="register__form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="register__inputs">
+                   {% for field in form %}
+                        <div class="register__inputContainer">
+                            <img src="{{ field.field.widget.attrs.image_url }}" alt="" oncontextmenu="return false;" class="register__img">
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+                <div class="register__description">
+                    Создавая аккаунт, вы соглашаетесь с нашей политикой конфидециальности
+                </div>
+                <div class="register__btn">
+                    <button type="submit" class="register__btn btn">Создать аккаунт</button>
+                </div>
+                <div class="register__signup">
+                    <a href="{% url 'login' %}">Войдите</a> если у вас уже есть аккаунт.
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

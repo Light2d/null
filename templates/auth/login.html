@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Логин</title>
+</head>
+<body>
+  <div class="register">
+    <div class="register__logo">
+        <img src="{% static 'null.png' %}" alt="" class="">
+    </div>
+    <div class="register__card">
+        <div class="register__title">Авторизация</div>
+        <form class="register__form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="register__inputs">
+                {% for field in form %}
+                <div class="register__inputContainer">
+                    <img src="../../static/auth/user.svg" alt="" oncontextmenu="return false;" class="register__img">
+                    {{field}}
+                </div>
+                {% endfor %}
+                <div class="register__captcha" style="display: block;">
+                    <div id="captchaText"></div>
+                    <button type="button" onclick="refreshCaptcha()" class="captha_btn refreshCaptcha">Обновить</button>
+                </div>
+
+                  <div class="register__inputContainer" style="display: block;">
+                    <input onblur="checkCaptcha()" placeholder="Введите текст с картинки" type="text" id="captchaInput" class="register__input register__captch">
+                </div>   
+            </div>
+            <div class="">
+                <a href="{% url 'login' %}">
+                    <button type="submit" class="register__btn btn">Войти</button>
+                </a>
+            </div>
+            <div class="register__signup">
+                <a href="{% url 'registration' %}">Зарегистрируйтесь</a> если еще нет аккаунта.
+            </div>
+        </form>
+    </div>
+</div>
+  <script src="{% static 'js/login.js' %}"></script>
+</body>
+</html>

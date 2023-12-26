@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="info">
+    <div class="info__title">
+        Мои участники
+    </div>
+    <div class="info__search">
+        <div class="info__title">{{ Title }}</div>
+        <select  name="" id="data__select" type="dropdown" onchange="filterParts()">
+            <option value="all">All</option>
+            {% for event in events %}
+                <option class='data__direction' id='direction-{{event.title}}' value="{{event.title}}">{{event.title}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="home">
+        {% for participant in participants %}
+        <div class="card" data-event="{{ participant.id }}">
+            <img src="{% static 'null.png' %}" alt="" class="card__img">
+            <div class="card__info">
+                <div class="card__title">{{ participant.participant }}</div>
+                <div class="card__date">{{ participant.event }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    <div class="info__btns">
+        <a href="/" class="info__btn btn">Назад</a>
+        <a class='info__btn btn' href="{% url 'import_file_form' %}">
+            <img class="header__notification" src="{% static 'img/base/add.svg' %}" alt="import_file">
+        </a>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+   
+    <script src="{% static 'js/app.js' %}"></script>
+{% endblock scripts %}

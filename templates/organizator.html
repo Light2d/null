@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body>
+   <div class="organizator">
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="" class="organizator__img">
+        {% else %}
+            <img src="{% static 'img/base/acc.png' %}" alt="" class="organizator__img">
+        {% endif %}
+        <div>
+            <div class="organizator__name">
+                {{ user.full_name}}
+            </div>
+            <div class="organizator__role">
+                <span>Роль: </span> {{ user.role}}
+            </div>
+        </div>
+       <div class="organizator__btn">
+           <a href='{% url 'my_info' %}' class="organizator__btn btn">Мероприятие</a>
+           <a href='{% url 'my_people' %}' class="organizator__btn btn">Участники</a>
+           <a href='{% url 'jury' %}' class="organizator__btn btn">Жюри</a>
+           <div style='text-align: right;'>
+               <a href="/"  class="btn btn_back">Назад</a>
+           </div>
+       </div>
+   </div>
+</body>
+{% endblock content %}
+
